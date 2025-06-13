@@ -132,10 +132,10 @@ st.markdown(
 cargo = st.selectbox("Cargo:", list(valores_diarias.keys()))
 
 # ✅ Linha do seletor de destino + link para sedes
-col1, col2 = st.columns([2, 1])
+col1, col2 = st.columns([1, 1])
 
 with col1:
-    destino = st.selectbox("Destino:", ['Sede TRT', 'Outra Localidade'])
+    destino = st.radio("Destino:", ['Sede TRT', 'Outra Localidade'], horizontal=True)
 
 with col2:
     with st.expander("Quais são as sedes dos TRTs?"):
@@ -166,10 +166,21 @@ with col2:
         - TRT 24 — Campo Grande (MS)
         """)
 
+col5, col6 = st.columns([1, 1])
 
-data_inicio = st.date_input("Data de Início do Deslocamento:", format="DD/MM/YYYY")
-data_fim = st.date_input("Data de Fim do Deslocamento:", format="DD/MM/YYYY")
-veiculo_oficial = st.checkbox("Deslocamento em Veículo Oficial?")
+with col5:
+    data_inicio = st.date_input("Data de Início do Deslocamento:", format="DD/MM/YYYY")
+
+with col6:
+    data_fim = st.date_input("Data de Fim do Deslocamento:", format="DD/MM/YYYY")
+
+modalidade_transporte = st.radio(
+    "Modalidade de Deslocamento:",
+    ["Veículo Oficial", "Aéreo", "Barco/Lancha", "Veículo Próprio", "Ônibus",],
+    horizontal=True
+)
+
+veiculo_oficial = (modalidade_transporte == "Veículo Oficial")
 
 prestara_assistencia = False
 acompanhamento_integral = False
