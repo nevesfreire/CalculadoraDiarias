@@ -4,9 +4,27 @@ import pandas as pd
 from datetime import datetime, timedelta
 import math
 
+st.title("Calculadora de Diárias para TRTs")
 # Valor da diária do Ministro STF
-diaria_ministro_STF = 1545.54
 
+col3, col4 = st.columns([1, 1])
+
+with col3:
+    diaria_input = st.text_input("Valor da diária do Ministro STF (R$):", value="1545.54")
+    try:
+        diaria_ministro_STF = float(diaria_input)
+    except ValueError:
+        diaria_ministro_STF = 1545.54  # valor padrão se não for numérico
+
+with col4:
+    auxilio_input = st.text_input("Auxílio alimentação (valor mensal em R$):", value="1784.42")
+    try:
+        auxilio_alimentacao_mensal = float(auxilio_input)
+    except ValueError:
+        auxilio_alimentacao_mensal = 1784.42
+
+
+desconto_dia_util = auxilio_alimentacao_mensal / 22
 # Cálculo das diárias baseado no percentual
 valores_diarias = {
     'Técnico Judiciário': {'Sede TRT': math.floor(diaria_ministro_STF * 0.45 * 100) / 100,
@@ -15,17 +33,15 @@ valores_diarias = {
                             'Outra Localidade': math.floor(diaria_ministro_STF * 0.44 * 100) / 100},
     'Juiz do Trabalho': {'Sede TRT': math.floor(diaria_ministro_STF * 0.90 * 100) / 100,
                          'Outra Localidade': math.floor(diaria_ministro_STF * 0.72 * 100) / 100},
-    'Desembargador': {'Sede TRT': math.floor(diaria_ministro_STF * 0.95 * 100) / 100,
-                      'Outra Localidade': math.floor(diaria_ministro_STF * 0.76 * 100) / 100},
     'Juiz Auxiliar': {'Sede TRT': math.floor(diaria_ministro_STF * 0.95 * 100) / 100,
+                      'Outra Localidade': math.floor(diaria_ministro_STF * 0.76 * 100) / 100},
+    'Desembargador': {'Sede TRT': math.floor(diaria_ministro_STF * 0.95 * 100) / 100,
                       'Outra Localidade': math.floor(diaria_ministro_STF * 0.76 * 100) / 100},
 }
 
 # Teto da diária pela LDO
 teto_diaria = 1106.20
 
-# Valor do auxílio alimentação
-desconto_dia_util = 81.11
 
 # Valor adicional se sem veículo oficial: 80% da diária de Analista
 adicional_analista = math.floor(valores_diarias['Analista Judiciário']['Outra Localidade'] * 0.8 * 100) / 100
@@ -100,7 +116,6 @@ def calcular_diarias(cargo, destino, data_inicio, data_fim,
 
     return resultados, total
 
-st.title("Calculadora de Diárias para a Justiça do Trabalho")
 
 # Controles principais
 st.markdown(
@@ -154,7 +169,7 @@ with col2:
 
 data_inicio = st.date_input("Data de Início do Deslocamento:", format="DD/MM/YYYY")
 data_fim = st.date_input("Data de Fim do Deslocamento:", format="DD/MM/YYYY")
-veiculo_oficial = st.checkbox("Deslocamento com Veículo Oficial?", value=True)
+veiculo_oficial = st.checkbox("Deslocamento em Veículo Oficial?")
 
 prestara_assistencia = False
 acompanhamento_integral = False
