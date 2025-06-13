@@ -132,7 +132,7 @@ st.markdown(
 cargo = st.selectbox("Cargo:", list(valores_diarias.keys()))
 
 # ✅ Linha do seletor de destino + link para sedes
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns([2, 1])
 
 with col1:
     destino = st.radio("Destino:", ['Sede TRT', 'Outra Localidade'], horizontal=True)
