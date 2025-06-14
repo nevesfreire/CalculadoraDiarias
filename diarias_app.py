@@ -5,23 +5,42 @@ from datetime import datetime, timedelta
 import math
 
 st.title("Calculadora de Diárias para TRTs")
-# Valor da diária do Ministro STF
+# Controles principais
+st.markdown(
+    """
+    <div style='background-color:#ffeb3b; padding:10px; border-left:5px solid #ffc107; margin-bottom:20px; color:#000'>
+        <strong>Atenção:</strong> essa é uma <strong>ESTIMATIVA</strong> das diárias. 
+        O valor exato será calculado durante a sua Solicitação de Diárias no SIGEO.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-col3, col4 = st.columns([1, 1])
+auxilio_alimentacao_mensal = 1784.42
+diaria_ministro_STF = 1545.54
+with st.expander("⚙️ Área restrita: alterar valores"):
+    senha = st.text_input("Senha:", type="password")
 
-with col3:
-    diaria_input = st.text_input("Valor da diária do Ministro STF (R$):", value="1545.54")
-    try:
-        diaria_ministro_STF = float(diaria_input)
-    except ValueError:
-        diaria_ministro_STF = 1545.54  # valor padrão se não for numérico
+    if senha == "1234":
+        st.success("Acesso liberado ✅")
 
-with col4:
-    auxilio_input = st.text_input("Auxílio alimentação (valor mensal em R$):", value="1784.42")
-    try:
-        auxilio_alimentacao_mensal = float(auxilio_input)
-    except ValueError:
-        auxilio_alimentacao_mensal = 1784.42
+        col3, col4 = st.columns([1, 1])
+
+        with col3:
+            diaria_input = st.text_input("Valor da diária do Ministro STF (R$):", value="1545.54")
+            try:
+                diaria_ministro_STF = float(diaria_input)
+            except ValueError:
+                diaria_ministro_STF = 1545.54
+
+        with col4:
+            auxilio_input = st.text_input("Auxílio alimentação (valor mensal em R$):", value="1784.42")
+            try:
+                auxilio_alimentacao_mensal = float(auxilio_input)
+            except ValueError:
+                auxilio_alimentacao_mensal = 1784.42
+    elif senha != "":
+        st.error("Senha incorreta.")
 
 
 desconto_dia_util = auxilio_alimentacao_mensal / 22
@@ -117,16 +136,6 @@ def calcular_diarias(cargo, destino, data_inicio, data_fim,
     return resultados, total
 
 
-# Controles principais
-st.markdown(
-    """
-    <div style='background-color:#ffeb3b; padding:10px; border-left:5px solid #ffc107; margin-bottom:20px; color:#000'>
-        <strong>Atenção:</strong> essa é uma <strong>ESTIMATIVA</strong> das diárias. 
-        O valor exato será calculado durante a sua Solicitação de Diárias no SIGEO.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 # Seletor de cargo
 cargo = st.selectbox("Cargo:", list(valores_diarias.keys()))
